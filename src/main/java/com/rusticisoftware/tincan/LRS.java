@@ -15,6 +15,9 @@
 */
 package com.rusticisoftware.tincan;
 
+import com.rusticisoftware.tincan.documents.*;
+import com.rusticisoftware.tincan.lrsresponses.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,13 +25,28 @@ import java.util.UUID;
  * Define the interface that must be satisfied to talk to an LRS
  */
 public interface LRS {
-    Statement retrieveStatement(String id) throws Exception;
-    Statement retrieveVoidedStatement(String id) throws Exception;
-    StatementsResult queryStatements(StatementsQueryInterface query) throws Exception;
-    StatementsResult moreStatements(String moreURL) throws Exception;
-    UUID saveStatement(Statement statement) throws Exception;
-    List<String> saveStatements(List<Statement> statements) throws Exception;
+    AboutLRSResponse about();
 
-    State retrieveState(String id, String activityId, Agent agent, UUID registration) throws Exception;
-    void saveState(State state, String activityId, Agent agent, UUID registration) throws Exception;
+    StatementLRSResponse saveStatement(Statement statement);
+    StatementsResultLRSResponse saveStatements(List<Statement> statements);
+    StatementLRSResponse retrieveStatement(String id);
+    StatementLRSResponse retrieveVoidedStatement(String id);
+    StatementsResultLRSResponse queryStatements(StatementsQueryInterface query);
+    StatementsResultLRSResponse moreStatements(String moreURL);
+
+    ProfileKeysLRSResponse retrieveStateIds(Activity activity, Agent agent, UUID registration);
+    StateLRSResponse retrieveState(String id, Activity activity, Agent agent, UUID registration);
+    LRSResponse saveState(StateDocument state);
+    LRSResponse deleteState(StateDocument state);
+    LRSResponse clearState(Activity activity, Agent agent, UUID registration);
+
+    ProfileKeysLRSResponse retrieveActivityProfileIds(Activity activity);
+    ActivityProfileLRSResponse retrieveActivityProfile(String id, Activity activity);
+    LRSResponse saveActivityProfile(ActivityProfileDocument profile);
+    LRSResponse deleteActivityProfile(ActivityProfileDocument profile);
+
+    ProfileKeysLRSResponse retrieveAgentProfileIds(Agent agent);
+    AgentProfileLRSResponse retrieveAgentProfile(String id, Agent agent);
+    LRSResponse saveAgentProfile(AgentProfileDocument profile);
+    LRSResponse deleteAgentProfile(AgentProfileDocument profile);
 }
